@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/FieldPs/escape-room-backend/internal/models"
 	"github.com/FieldPs/escape-room-backend/internal/routes"
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -41,6 +44,20 @@ func main() {
 
 	// Set up Gin router
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"}, // เปลี่ยนเป็น URL ของ frontend
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Authorization"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	// ✅ ต้องรองรับ OPTIONS request สำหรับ Preflight
+	r.OPTIONS("/*any", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 	routes.SetupRoutes(r, db)
 
 	// Run server
