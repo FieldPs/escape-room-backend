@@ -1,7 +1,4 @@
-# Daily Puzzle Game Backend
-
-
-### Setup Instructions
+## Setup Instructions
 
 #### 1. Clone the Repository
 ```bash
@@ -38,12 +35,12 @@ APP_ENV=development
 2. Install Go Dependencies `go mod download`
 
 #### 4. run project locally
-go run cmd/main.go
+`go run cmd/main.go`
 
 ## API Endpoints
 
 | Method | Endpoint                | Description                  | Payload Example                     |
 |--------|-------------------------|------------------------------|-------------------------------------|
-| GET    | `/health`               | Check app health             | None                               |
+| GET    | `/healthz`               | Check app health             | None                               |
 | POST   | `/api/v1/register`      | Register a new user          | `{"username": "test", "password": "pass123"}` |
 | POST   | `/api/v1/login`         | Login and get JWT            | `{"username": "test", "password": "pass123"}` |
