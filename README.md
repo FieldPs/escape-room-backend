@@ -39,8 +39,10 @@ APP_ENV=development
 
 ## API Endpoints
 
-| Method | Endpoint                | Description                  | Payload Example                     |
-|--------|-------------------------|------------------------------|-------------------------------------|
-| GET    | `/healthz`               | Check app health             | None                               |
-| POST   | `/api/v1/register`      | Register a new user          | `{"username": "test", "password": "pass123"}` |
-| POST   | `/api/v1/login`         | Login and get JWT            | `{"username": "test", "password": "pass123"}` |
+| Method | Endpoint             | Description                  | Auth | Payload Example                     |
+|--------|----------------------|------------------------------|------|-------------------------------------|
+| GET    | `/healthz`           | Check app health             |No    | None                               |
+| POST   | `/api/v1/register`   | Register a new user          |No    | `{"username": "test", "password": "pass123"}` |
+| POST   | `/api/v1/login`      | Login and get JWT            |No    | `{"username": "test", "password": "pass123"}` |
+| GET    | `/api/v1/stats`      | Get Stats of User            | ✅  | None                                 |
+| POST   | `/api/v1/submit_answer`| send puzzle answer         | ✅  | `{"Puzzle_id" : 1, "answer" : "1234"}` |
