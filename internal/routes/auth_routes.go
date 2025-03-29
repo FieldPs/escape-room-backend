@@ -34,7 +34,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set("userID", claims.UserID)
+		c.Set("userID", uint(claims.UserID))
 		c.Next()
 	}
 }
@@ -59,18 +59,51 @@ func registerHandler(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Create user
-		user := models.User{
-			Username:     input.Username,
-			PasswordHash: hash,
-		}
+		// Use transaction to create both user and solved puzzle record
+		err = db.Transaction(func(tx *gorm.DB) error {
+			// Create user
+			user := models.User{
+				Username:     input.Username,
+				PasswordHash: hash,
+			}
 
-		if err := db.Create(&user).Error; err != nil {
-			c.JSON(http.StatusConflict, gin.H{"error": "Username already taken"})
+			if err := tx.Create(&user).Error; err != nil {
+				return err // This will rollback the transaction
+			}
+
+			// Create initial UserSolvedPuzzle record
+			var totalPuzzles int64
+			if err := tx.Model(&models.Puzzle{}).Count(&totalPuzzles).Error; err != nil {
+				return err
+			}
+
+			solvedPuzzle := models.UserSolvedPuzzle{
+				UserID:        user.ID,
+				SolvedPuzzles: 0,
+				TotalPuzzles:  uint(totalPuzzles),
+				CurrentStreak: 0,
+				BestStreak:    0,
+			}
+
+			if err := tx.Create(&solvedPuzzle).Error; err != nil {
+				return err
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			if errors.Is(err, gorm.ErrDuplicatedKey) {
+				c.JSON(http.StatusConflict, gin.H{"error": "Username already taken"})
+			} else {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Registration failed"})
+			}
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"message": "User registered"})
+		c.JSON(http.StatusCreated, gin.H{
+			"message": "User registered successfully",
+		})
 	}
 }
 

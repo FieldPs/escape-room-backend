@@ -22,7 +22,7 @@ type UserStatsResponse struct {
 	LastSolvedAt  time.Time              `json:"last_solved_at"`
 }
 
-func GetUserStats(db *gorm.DB, userID int) (*UserStatsResponse, error) {
+func GetUserStats(db *gorm.DB, userID uint) (*UserStatsResponse, error) {
 	// Initialize response with data from UserSolvedPuzzle
 	var solvedPuzzle models.UserSolvedPuzzle
 	if err := db.Where("user_id = ?", userID).First(&solvedPuzzle).Error; err != nil {
