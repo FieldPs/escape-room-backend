@@ -97,7 +97,7 @@ func SeedPuzzles(db *gorm.DB) error {
 			ID:        7,
 			Title:     "Demo Puzzle",
 			Content:   "This is a demo puzzle.",
-			Solution:  "1234",
+			Solution:  "251857",
 			Subjects:  pq.StringArray{"Physics", "Math", "English"},
 			CreatedAt: time.Now(),
 		},
