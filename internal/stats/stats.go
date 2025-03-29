@@ -2,6 +2,7 @@ package stats
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/FieldPs/escape-room-backend/internal/models"
@@ -69,11 +70,13 @@ func GetUserStats(db *gorm.DB, userID uint) (*UserStatsResponse, error) {
 
 	// Build subject stats
 	for subject, total := range subjectTotals {
+		percentage := math.Round(float64(subjectSolved[subject])/float64(total)*100*100) / 100
+
 		response.SubjectStats[subject] = SubjectStat{
 			Subject:    subject,
 			Total:      total,
 			Solved:     subjectSolved[subject],
-			Percentage: float64(subjectSolved[subject]) / float64(total) * 100,
+			Percentage: percentage,
 		}
 	}
 
