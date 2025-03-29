@@ -51,7 +51,7 @@ func SeedPuzzles(db *gorm.DB) error {
 			Content:   "This is the first puzzle.",
 			Solution:  "101",
 			Subjects:  randomSubjects(),
-			CreatedAt: time.Now().Add(-96 * time.Hour),
+			CreatedAt: time.Now().Add(-148 * time.Hour),
 		},
 		{
 			ID:        2,
@@ -59,7 +59,7 @@ func SeedPuzzles(db *gorm.DB) error {
 			Content:   "This is the second puzzle.",
 			Solution:  "202",
 			Subjects:  randomSubjects(),
-			CreatedAt: time.Now().Add(-72 * time.Hour),
+			CreatedAt: time.Now().Add(-120 * time.Hour),
 		},
 		{
 			ID:        3,
@@ -67,7 +67,7 @@ func SeedPuzzles(db *gorm.DB) error {
 			Content:   "This is the third puzzle.",
 			Solution:  "202",
 			Subjects:  randomSubjects(),
-			CreatedAt: time.Now().Add(-48 * time.Hour),
+			CreatedAt: time.Now().Add(-96 * time.Hour),
 		},
 		{
 			ID:        4,
@@ -75,7 +75,7 @@ func SeedPuzzles(db *gorm.DB) error {
 			Content:   "This is the Forth puzzle.",
 			Solution:  "202",
 			Subjects:  randomSubjects(),
-			CreatedAt: time.Now().Add(-24 * time.Hour),
+			CreatedAt: time.Now().Add(-72 * time.Hour),
 		},
 		{
 			ID:        5,
@@ -83,6 +83,22 @@ func SeedPuzzles(db *gorm.DB) error {
 			Content:   "This is the Fifth puzzle.",
 			Solution:  "202",
 			Subjects:  randomSubjects(),
+			CreatedAt: time.Now().Add(-48 * time.Hour),
+		},
+		{
+			ID:        6,
+			Title:     "Sixth Puzzle",
+			Content:   "This is the Sixth puzzle.",
+			Solution:  "202",
+			Subjects:  randomSubjects(),
+			CreatedAt: time.Now().Add(-24 * time.Hour),
+		},
+		{
+			ID:        7,
+			Title:     "Demo Puzzle",
+			Content:   "This is a demo puzzle.",
+			Solution:  "1234",
+			Subjects:  pq.StringArray{"Physics", "Math", "English"},
 			CreatedAt: time.Now(),
 		},
 	}
@@ -102,17 +118,22 @@ func SeedUserPuzzles(db *gorm.DB) error {
 	userPuzzles := []models.UserPuzzle{
 		{
 			UserID:   1,
-			PuzzleID: 2,
-			SolvedAt: now.Add(-72 * time.Hour), // 3 days ago
-		},
-		{
-			UserID:   1,
 			PuzzleID: 3,
-			SolvedAt: now.Add(-48 * time.Hour), // 2 days ago
+			SolvedAt: now.Add(-96 * time.Hour), // 3 days ago
 		},
 		{
 			UserID:   1,
 			PuzzleID: 4,
+			SolvedAt: now.Add(-72 * time.Hour), // 2 days ago
+		},
+		{
+			UserID:   1,
+			PuzzleID: 5,
+			SolvedAt: now.Add(-48 * time.Hour), // 1 day ago
+		},
+		{
+			UserID:   1,
+			PuzzleID: 6,
 			SolvedAt: now.Add(-24 * time.Hour), // 1 day ago
 		},
 		// Add other user's puzzle solves if needed
@@ -164,10 +185,10 @@ func SeedUserSolvedPuzzles(db *gorm.DB) error {
 	userStat := models.UserSolvedPuzzle{
 		// User 1 stats (solved 3 puzzles, current streak 3)
 		UserID:        1,
-		SolvedPuzzles: 3,
+		SolvedPuzzles: 4,
 		TotalPuzzles:  uint(totalPuzzles),
-		CurrentStreak: 3,
-		BestStreak:    3,
+		CurrentStreak: 4,
+		BestStreak:    4,
 		LastSolvedAt:  now.Add(-24 * time.Hour), // Matches last solve time
 	}
 

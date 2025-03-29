@@ -11,7 +11,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	apiV1 := r.Group("/api/v1")
 	{
 		RegisterAuthRoutes(apiV1, db)
-		// RegisterPuzzleRoutes(apiV1, db)
+		RegisterPuzzleRoutes(apiV1, db)
 	}
 
 	r.GET("/healthz", func(c *gin.Context) {
