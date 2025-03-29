@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/FieldPs/escape-room-backend/internal/models"
 	"github.com/FieldPs/escape-room-backend/internal/routes"
+	"github.com/FieldPs/escape-room-backend/migrations"
 	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
@@ -40,7 +41,11 @@ func main() {
 	if err != nil {
 		panic("failed to connect database: " + err.Error())
 	}
-	db.AutoMigrate(&models.User{}, &models.Puzzle{}, &models.UserPuzzle{})
+
+	// 1. Run migrations FIRST
+	if err := migrations.MigrateAll(db); err != nil {
+		log.Fatal("Migration failed:", err)
+	}
 
 	// Set up Gin router
 	r := gin.Default()
@@ -54,7 +59,6 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// ✅ ต้องรองรับ OPTIONS request สำหรับ Preflight
 	r.OPTIONS("/*any", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
